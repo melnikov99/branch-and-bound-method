@@ -30,6 +30,7 @@ map<string, double> getX(const Simplex& p) {
 		solution["x" + to_string(i)] = 0;
 	for (unsigned int i = 0; i < var.size() - 1; i++) {
 		num = ParseString(var[i]);
+
 		switch (num) {
 			case 1: {
 				solution["x1"] = matrixS[i];
@@ -37,7 +38,7 @@ map<string, double> getX(const Simplex& p) {
 			}
 			case 2: {
 				solution["x2"] = matrixS[i];
-				break;
+				break; 
 			}
 			case 3: {
 				solution["x3"] = matrixS[i];
@@ -133,14 +134,12 @@ void Delete(Tnode *t) {
 		}
 	}
 }
-bool CheckAllLeafs(const vector<Tnode*> v, int record) {
+bool CheckAllLeafs(const vector<Tnode*> v) {
 	bool flag = true;
-	bool record_flag = true;
 	for (const auto item : v) {
 		flag = flag && IsSolutionInteger(item->answer);
-		record_flag = record_flag && (item->answer.at("F ") <= record);
 	}
-	return flag || record_flag;
+	return flag;
 }
 Tnode* MaxLeaf(const vector<Tnode*>& v) {
 	if (v.empty())
@@ -237,7 +236,7 @@ int main()
 		Tnode *d1 = d;
 		int i = 1;
 		int record = 0;
-		while (!CheckAllLeafs(GetAllLeafs(d1), record)) {
+		while (!CheckAllLeafs(GetAllLeafs(d1))) {
 			cout << "TASK " << i << endl;
 			leafs.clear();
 			auto cndtn = CreateConditionPair(d->answer);
@@ -251,8 +250,6 @@ int main()
 			cout << fixed << setprecision(2) << d->r->answer << endl;
 			auto v = GetAllLeafs(d1);
 			auto m = MaxLeaf(v);
-			record = GetRecord(v);
-			cout << record << endl;
 			d = m;
 			i++;
 		}
